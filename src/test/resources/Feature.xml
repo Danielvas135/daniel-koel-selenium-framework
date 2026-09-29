@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Feature">
+    <parameter name="Url" value="https://qa.koel.app/"/>
+
+    <test name="New features">
+        <classes>
+            <class name="tests.PlaylistTests"/>
+        </classes>
+    </test>
+</suite>

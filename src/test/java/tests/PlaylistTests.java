@@ -18,7 +18,12 @@ public class PlaylistTests extends BaseTest {
         String renamed = name + "_Renamed";
 
         home.createPlaylist(name);
+        Assert.assertTrue(home.playlistExists(name), "Playlist should exist after create");
+
         home.renamePlaylist(name, renamed);
+        Assert.assertTrue(home.playlistExists(renamed), "Renamed playlist should exist");
+        Assert.assertFalse(home.playlistExists(name), "Old name should be gone after rename");
+
         home.deletePlaylist(renamed);
 
         Assert.assertFalse(
