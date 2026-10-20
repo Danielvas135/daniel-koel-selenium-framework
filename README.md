@@ -1,16 +1,62 @@
-<h1>Test Pro A75 Class Automation Framework Repository</h1><br>
+# Koel Selenium Automation Framework
 
-Welcome to the Test Pro A75 Class Automation Framework repository! <br>
+A Java + Selenium + TestNG UI automation framework for the Koel music player app, built with the Page Object Model.
 
-<h2>Overview</h2>
-This repository contains the Test Pro A75 Class Automation Framework, which serves as an educational tool for students' homework and live class demonstrations.
+## Overview
 
-<h2>Getting Started</h2>
-If you're a student enrolled in the A75 class, follow these steps to get started with the A75 Class Automation Framework:<br><br>
-1.) Clone this repository to your local machine. <br>
-2.) Explore the sample test case in the 'LoginTests' java class located in the 'src' directory under 'test' > 'java' folder <br>
-3.) Complete the assigned homework exercises and participate in live class demonstrations using the framework. <br><br>
-For more detailed instructions regarding the installation of the framework, please refer to the A75 class materials (LMS & slides).
+This project automates key user flows in the Koel web application (https://qa.koel.app), including authentication, playlist management, and profile updates. It is structured as a reusable framework that can be extended with additional page objects and test suites.
 
-<h2>Contact Information</h2>
-If you have any questions or need further assistance, feel free to contact the course instructor, our support team or send a message in Teams for A75.  
+## Tech Stack
+
+- **Java**
+- **Selenium WebDriver**
+- **TestNG**
+- **Gradle**
+- **Page Object Model**
+- **Cucumber** (feature files + step definitions)
+
+## Project Structure
+
+```
+src/
+  test/
+    java/
+      pages/          # Page objects (LoginPage, HomePage, BasePage)
+      tests/          # TestNG test classes (LoginTests, PlaylistTests, ProfileTests)
+      runners/        # Cucumber runners
+      stepDefinitions/# Cucumber step definitions
+    resources/
+      features/       # Gherkin feature files
+      *.xml           # TestNG suites
+```
+
+## Features Covered
+
+- Valid and invalid login
+- Playlist create, rename, and delete
+- Profile updates
+- Base setup for driver management, waits, and screenshots
+
+## Getting Started
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Danielvas135/daniel-koel-selenium-framework.git
+   ```
+2. Open the project in IntelliJ IDEA (or any IDE with Gradle support).
+3. Run tests with:
+   ```bash
+   ./gradlew test
+   ```
+   Or run a specific suite from the TestNG XML files in `src/test/resources`.
+
+## Notes
+
+- Tests target the QA environment of Koel.
+- Credentials are externalized; update them in the test classes or a config file as needed.
+- The framework follows the Page Object Model for maintainability.
+
+## Author
+
+Daniel Vasquez  
+QA Automation Engineer
