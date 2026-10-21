@@ -6,7 +6,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +112,10 @@ public class HomePage extends BasePage {
     }
 
     public void openInfoPanel() {
-        safeClick(infoBtn);
+        if (!isInfoPanelVisible()) {
+            safeClick(infoBtn);
+            shortPause();
+        }
     }
 
     public boolean isInfoPanelVisible() {
@@ -191,15 +197,21 @@ public class HomePage extends BasePage {
     }
 
     public void clickArtistShuffle() {
-        By shuffle = By.cssSelector("#extraPanelArtist .shuffle.control, #extraPanelArtist button[title*='Shuffle']");
-        WebElement btn = waitClickable(shuffle);
+        By shuffle = By.xpath(
+                "//div[@id='extraPanelArtist']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]"
+        );
+        WebElement btn = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(shuffle));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
         shortPause();
     }
 
     public void clickAlbumShuffle() {
-        By shuffle = By.cssSelector("#extraPanelAlbum .shuffle.control, #extraPanelAlbum button[title*='Shuffle']");
-        WebElement btn = waitClickable(shuffle);
+        By shuffle = By.xpath(
+                "//div[@id='extraPanelAlbum']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]"
+        );
+        WebElement btn = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(shuffle));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
         shortPause();
     }

@@ -100,13 +100,14 @@ public class InfoPanelTest extends BaseTest {
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
         home.playFirstSong();
-        home.openInfoPanel();
+        try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
 
-        // Artist tab shuffle
+        home.openInfoPanel();
+        try { Thread.sleep(800); } catch (InterruptedException ignored) {}
+
         home.openArtistTab();
         home.clickArtistShuffle();
 
-        // Album tab shuffle
         home.openAlbumTab();
         home.clickAlbumShuffle();
 
