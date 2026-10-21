@@ -56,6 +56,11 @@ src/
 - Credentials are externalized; update them in the test classes or a config file as needed.
 - The framework follows the Page Object Model for maintainability.
 
+## Sprint 9 – Login, Logout, Info Panel
+
+Selenium automation for INTERNSHIP-110382, 110387, and 110391.
+All 14 tests pass.
+
 ## Author
 
 Daniel Vasquez  
