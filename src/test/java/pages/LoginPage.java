@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.TimeoutException;
 
 public class LoginPage extends BasePage {
 
@@ -17,6 +18,27 @@ public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
+    }
+
+    @FindBy(css = ".error, .alert, [role='alert'], .login-error")
+    private WebElement errorMessage;
+
+    public boolean isLoaded() {
+        try {
+            waitVisible(emailInput);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public String getErrorMessage() {
+        try {
+            waitVisible(errorMessage);
+            return errorMessage.getText().trim();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public void provideEmail(String email) {
@@ -38,5 +60,8 @@ public class LoginPage extends BasePage {
         HomePage home = new HomePage(driver);
         home.isLoaded();
         return home;
+    }
+    public String getEmailValidationMessage() {
+        return emailInput.getAttribute("validationMessage");
     }
 }

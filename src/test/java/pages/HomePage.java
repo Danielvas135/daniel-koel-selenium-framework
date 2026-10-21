@@ -3,9 +3,13 @@ package pages;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class HomePage extends BasePage {
 
@@ -28,6 +32,24 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//button[contains(@class, 'ok') or contains(text(), 'OK')]")
     private WebElement okBtn;
 
+    @FindBy(css = "[data-testid='btn-logout']")
+    private WebElement logoutBtn;
+
+    @FindBy(css = "[data-testid='toggle-extra-panel-btn']")
+    private WebElement infoBtn;
+
+    @FindBy(css = "#extra, [data-testid='extra-panel']")
+    private WebElement infoPanel;
+
+    @FindBy(css = "#extraPanelAlbum, [id='extraPanelAlbum']")
+    private WebElement albumName;
+
+    @FindBy(css = "#extraPanelArtist, [id='extraPanelArtist']")
+    private WebElement artistName;
+
+    @FindBy(css = "tr.song-item")
+    private List<WebElement> songRows;
+
     // ---- dynamic locators ----
     private By playlistByName(String name) {
         return By.xpath("//section[@id='playlists']//a[normalize-space(text())='" + name + "']");
@@ -45,6 +67,57 @@ public class HomePage extends BasePage {
             waitVisible(allSongsLink);
             return true;
         } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public void logout() {
+        safeClick(logoutBtn);
+    }
+
+    public void playFirstSong() {
+        safeClick(allSongsLink);
+        shortPause();
+
+        if (!songRows.isEmpty()) {
+            safeClick(songRows.get(0));
+        }
+    }
+
+    public void openInfoPanel() {
+        safeClick(infoBtn);
+    }
+
+    public boolean isInfoPanelVisible() {
+        try {
+            WebElement albumTab = driver.findElement(By.id("extraTabAlbum"));
+            waitClickable(albumTab);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean hasAlbumName() {
+        try {
+            WebElement albumTab = driver.findElement(By.id("extraTabAlbum"));
+            safeClick(albumTab);
+            shortPause();
+            WebElement panel = driver.findElement(By.id("extraPanelAlbum"));
+            return panel.isDisplayed() && !panel.getText().isBlank();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean hasArtistName() {
+        try {
+            WebElement artistTab = driver.findElement(By.id("extraTabArtist"));
+            safeClick(artistTab);
+            shortPause();
+            WebElement panel = driver.findElement(By.id("extraPanelArtist"));
+            return panel.isDisplayed() && !panel.getText().isBlank();
+        } catch (Exception e) {
             return false;
         }
     }

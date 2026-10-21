@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sprint 9 - Login Logout Info Panel">
+    <test name="Login Tests">
+        <classes>
+            <class name="tests.LoginTests"/>
+        </classes>
+    </test>
+     <test name="Logout Tests">
+        <classes>
+            <class name="tests.LogoutTest"/>
+        </classes>
+    </test>
+    <test name="Info Panel Tests">
+        <classes>
+            <class name="tests.InfoPanelTest"/>
+        </classes>
+    </test>
+</suite>
