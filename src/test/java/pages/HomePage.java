@@ -5,6 +5,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,12 @@ public class HomePage extends BasePage {
     @FindBy(css = "tr.song-item")
     private List<WebElement> songRows;
 
+    @FindBy(css = "[data-test='btn-play-all'], .btn-play-all")
+    private WebElement playAllBtn;
+
+    @FindBy(css = "[data-test='btn-shuffle-all'], .btn-shuffle-all")
+    private WebElement shuffleAllBtn;
+
     // ---- dynamic locators ----
     private By playlistByName(String name) {
         return By.xpath("//section[@id='playlists']//a[normalize-space(text())='" + name + "']");
@@ -80,8 +87,25 @@ public class HomePage extends BasePage {
         shortPause();
 
         if (!songRows.isEmpty()) {
-            safeClick(songRows.get(0));
+            WebElement first = songRows.get(0);
+            // Double-click starts playback on most Koel builds
+            new Actions(driver)
+                    .moveToElement(first)
+                    .doubleClick(first)
+                    .perform();
+            shortPause();
         }
+    }
+    public void openAllSongs() {
+        safeClick(allSongsLink);
+        shortPause();
+    }
+
+    public void clickShuffleAll() {
+        By shuffle = By.cssSelector("button.btn-shuffle-all, [data-test='btn-shuffle-all']");
+        WebElement btn = waitClickable(shuffle);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        shortPause();
     }
 
     public void openInfoPanel() {
@@ -98,25 +122,10 @@ public class HomePage extends BasePage {
         }
     }
 
-    public boolean hasAlbumName() {
+    public boolean isShuffleButtonVisible() {
         try {
-            WebElement albumTab = driver.findElement(By.id("extraTabAlbum"));
-            safeClick(albumTab);
-            shortPause();
-            WebElement panel = driver.findElement(By.id("extraPanelAlbum"));
-            return panel.isDisplayed() && !panel.getText().isBlank();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean hasArtistName() {
-        try {
-            WebElement artistTab = driver.findElement(By.id("extraTabArtist"));
-            safeClick(artistTab);
-            shortPause();
-            WebElement panel = driver.findElement(By.id("extraPanelArtist"));
-            return panel.isDisplayed() && !panel.getText().isBlank();
+            waitClickable(shuffleAllBtn);
+            return true;
         } catch (Exception e) {
             return false;
         }
@@ -130,38 +139,43 @@ public class HomePage extends BasePage {
         }
     }
 
-    public void closeInfoPanel() {
-        safeClick(infoBtn);   // click INFO again to hide
-        shortPause();
-    }
-
     public boolean isInfoPanelHidden() {
         try {
             WebElement panel = driver.findElement(By.cssSelector("#extra, [data-testid='extra-panel']"));
-            return !panel.getAttribute("class").contains("showing");
+            String cls = panel.getAttribute("class");
+            return cls == null || !cls.contains("showing");
         } catch (Exception e) {
             return true;
         }
     }
 
     public void openArtistTab() {
-        safeClick(driver.findElement(By.id("extraTabArtist")));
+        WebElement tab = driver.findElement(By.id("extraTabArtist"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
         shortPause();
     }
 
     public void openAlbumTab() {
-        safeClick(driver.findElement(By.id("extraTabAlbum")));
+        WebElement tab = driver.findElement(By.id("extraTabAlbum"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
         shortPause();
     }
 
     public void openLyricsTab() {
-        safeClick(driver.findElement(By.id("extraTabLyrics")));
+        WebElement tab = driver.findElement(By.id("extraTabLyrics"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
+        shortPause();
+    }
+
+    public void closeInfoPanel() {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", infoBtn);
         shortPause();
     }
 
     public String getArtistPanelText() {
         try {
-            return driver.findElement(By.id("extraPanelArtist")).getText().trim();
+            WebElement panel = driver.findElement(By.cssSelector("#extraPanelArtist [data-test='artist-info'], #extraPanelArtist"));
+            return panel.getText().trim();
         } catch (Exception e) {
             return "";
         }
@@ -169,10 +183,25 @@ public class HomePage extends BasePage {
 
     public String getAlbumPanelText() {
         try {
-            return driver.findElement(By.id("extraPanelAlbum")).getText().trim();
+            WebElement panel = driver.findElement(By.cssSelector("#extraPanelAlbum [data-test='album-info'], #extraPanelAlbum"));
+            return panel.getText().trim();
         } catch (Exception e) {
             return "";
         }
+    }
+
+    public void clickArtistShuffle() {
+        By shuffle = By.cssSelector("#extraPanelArtist .shuffle.control, #extraPanelArtist button[title*='Shuffle']");
+        WebElement btn = waitClickable(shuffle);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        shortPause();
+    }
+
+    public void clickAlbumShuffle() {
+        By shuffle = By.cssSelector("#extraPanelAlbum .shuffle.control, #extraPanelAlbum button[title*='Shuffle']");
+        WebElement btn = waitClickable(shuffle);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        shortPause();
     }
 
     public String getLyricsPanelText() {
