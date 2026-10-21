@@ -121,6 +121,67 @@ public class HomePage extends BasePage {
             return false;
         }
     }
+    public boolean isLogoutButtonVisible() {
+        try {
+            waitClickable(logoutBtn);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void closeInfoPanel() {
+        safeClick(infoBtn);   // click INFO again to hide
+        shortPause();
+    }
+
+    public boolean isInfoPanelHidden() {
+        try {
+            WebElement panel = driver.findElement(By.cssSelector("#extra, [data-testid='extra-panel']"));
+            return !panel.getAttribute("class").contains("showing");
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    public void openArtistTab() {
+        safeClick(driver.findElement(By.id("extraTabArtist")));
+        shortPause();
+    }
+
+    public void openAlbumTab() {
+        safeClick(driver.findElement(By.id("extraTabAlbum")));
+        shortPause();
+    }
+
+    public void openLyricsTab() {
+        safeClick(driver.findElement(By.id("extraTabLyrics")));
+        shortPause();
+    }
+
+    public String getArtistPanelText() {
+        try {
+            return driver.findElement(By.id("extraPanelArtist")).getText().trim();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public String getAlbumPanelText() {
+        try {
+            return driver.findElement(By.id("extraPanelAlbum")).getText().trim();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public String getLyricsPanelText() {
+        try {
+            return driver.findElement(By.id("extraPanelLyrics")).getText().trim();
+        } catch (Exception e) {
+            return "";
+        }
+    }
 
     // ================== CORE ACTIONS ==================
 
