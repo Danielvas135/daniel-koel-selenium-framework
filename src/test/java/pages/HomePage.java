@@ -3,9 +3,6 @@ package pages;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,11 +10,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class HomePage extends BasePage {
 
-    // ---- PageFactory elements ----
     @FindBy(xpath = "//a[@href='#!/songs' and normalize-space(text())='All Songs']")
     private WebElement allSongsLink;
 
@@ -42,25 +36,12 @@ public class HomePage extends BasePage {
     @FindBy(css = "[data-testid='toggle-extra-panel-btn']")
     private WebElement infoBtn;
 
-    @FindBy(css = "#extra, [data-testid='extra-panel']")
-    private WebElement infoPanel;
-
-    @FindBy(css = "#extraPanelAlbum, [id='extraPanelAlbum']")
-    private WebElement albumName;
-
-    @FindBy(css = "#extraPanelArtist, [id='extraPanelArtist']")
-    private WebElement artistName;
-
     @FindBy(css = "tr.song-item")
     private List<WebElement> songRows;
-
-    @FindBy(css = "[data-test='btn-play-all'], .btn-play-all")
-    private WebElement playAllBtn;
 
     @FindBy(css = "[data-test='btn-shuffle-all'], .btn-shuffle-all")
     private WebElement shuffleAllBtn;
 
-    // ---- dynamic locators ----
     private By playlistByName(String name) {
         return By.xpath("//section[@id='playlists']//a[normalize-space(text())='" + name + "']");
     }
@@ -88,17 +69,13 @@ public class HomePage extends BasePage {
     public void playFirstSong() {
         safeClick(allSongsLink);
         shortPause();
-
         if (!songRows.isEmpty()) {
             WebElement first = songRows.get(0);
-            // Double-click starts playback on most Koel builds
-            new Actions(driver)
-                    .moveToElement(first)
-                    .doubleClick(first)
-                    .perform();
+            new Actions(driver).moveToElement(first).doubleClick(first).perform();
             shortPause();
         }
     }
+
     public void openAllSongs() {
         safeClick(allSongsLink);
         shortPause();
@@ -128,14 +105,6 @@ public class HomePage extends BasePage {
         }
     }
 
-    public boolean isShuffleButtonVisible() {
-        try {
-            waitClickable(shuffleAllBtn);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
     public boolean isLogoutButtonVisible() {
         try {
             waitClickable(logoutBtn);
@@ -145,75 +114,30 @@ public class HomePage extends BasePage {
         }
     }
 
-    public boolean isInfoPanelHidden() {
-        try {
-            WebElement panel = driver.findElement(By.cssSelector("#extra, [data-testid='extra-panel']"));
-            String cls = panel.getAttribute("class");
-            return cls == null || !cls.contains("showing");
-        } catch (Exception e) {
-            return true;
-        }
-    }
-
     public void openArtistTab() {
-        WebElement tab = driver.findElement(By.id("extraTabArtist"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
-        shortPause();
+        jsClick(By.id("extraTabArtist"));
     }
 
     public void openAlbumTab() {
-        WebElement tab = driver.findElement(By.id("extraTabAlbum"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
-        shortPause();
+        jsClick(By.id("extraTabAlbum"));
     }
 
     public void openLyricsTab() {
-        WebElement tab = driver.findElement(By.id("extraTabLyrics"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
-        shortPause();
+        jsClick(By.id("extraTabLyrics"));
     }
 
     public void closeInfoPanel() {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", infoBtn);
-        shortPause();
-    }
-
-    public String getArtistPanelText() {
-        try {
-            WebElement panel = driver.findElement(By.cssSelector("#extraPanelArtist [data-test='artist-info'], #extraPanelArtist"));
-            return panel.getText().trim();
-        } catch (Exception e) {
-            return "";
-        }
-    }
-
-    public String getAlbumPanelText() {
-        try {
-            WebElement panel = driver.findElement(By.cssSelector("#extraPanelAlbum [data-test='album-info'], #extraPanelAlbum"));
-            return panel.getText().trim();
-        } catch (Exception e) {
-            return "";
-        }
     }
 
     public void clickArtistShuffle() {
-        By shuffle = By.xpath(
-                "//div[@id='extraPanelArtist']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]"
-        );
-        WebElement btn = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(shuffle));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
-        shortPause();
+        By shuffle = By.xpath("//div[@id='extraPanelArtist']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]");
+        jsClick(shuffle);
     }
 
     public void clickAlbumShuffle() {
-        By shuffle = By.xpath(
-                "//div[@id='extraPanelAlbum']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]"
-        );
-        WebElement btn = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(shuffle));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
-        shortPause();
+        By shuffle = By.xpath("//div[@id='extraPanelAlbum']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]");
+        jsClick(shuffle);
     }
 
     public String getLyricsPanelText() {
@@ -223,8 +147,6 @@ public class HomePage extends BasePage {
             return "";
         }
     }
-
-    // ================== CORE ACTIONS ==================
 
     public void createPlaylist(String name) {
         safeClick(sidebarPlaylistBtn);
@@ -236,41 +158,22 @@ public class HomePage extends BasePage {
 
     public void renamePlaylist(String oldName, String newName) {
         WebElement item = waitVisible(playlistByName(oldName));
-
-        // Koel supports inline edit via double-click on playlist
-        new Actions(driver)
-                .moveToElement(item)
-                .doubleClick(item)
-                .perform();
-
+        new Actions(driver).moveToElement(item).doubleClick(item).perform();
         WebElement input = waitVisible(RENAME_INPUT);
         input.sendKeys(Keys.CONTROL, "a");
         input.sendKeys(Keys.BACK_SPACE);
         input.sendKeys(newName, Keys.ENTER);
-
         shortPause();
     }
 
     public void deletePlaylist(String name) {
         List<WebElement> list = driver.findElements(playlistByName(name));
-        if (list.isEmpty()) {
-            return; // nothing to delete, keep it simple
-        }
-
-        WebElement item = list.get(0);
-        item.click();
-
+        if (list.isEmpty()) return;
+        list.get(0).click();
         safeClick(deletePlaylistBtn);
-
-        try {
-            safeClick(okBtn);
-        } catch (Exception ignored) {
-        }
-
+        try { safeClick(okBtn); } catch (Exception ignored) {}
         shortPause();
     }
-
-    // ================== SMALL HELPERS ==================
 
     public boolean playlistExists(String name) {
         return !driver.findElements(playlistByName(name)).isEmpty();
@@ -284,9 +187,14 @@ public class HomePage extends BasePage {
         return out;
     }
 
+    private void jsClick(By locator) {
+        WebElement el = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(locator));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", el);
+        shortPause();
+    }
+
     private void shortPause() {
-        try {
-            Thread.sleep(300); // tiny, just to let UI apply changes
-        } catch (InterruptedException ignored) {}
+        try { Thread.sleep(100); } catch (InterruptedException ignored) {}
     }
 }
