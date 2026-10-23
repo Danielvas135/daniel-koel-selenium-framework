@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sprint 10 - Current Queue">
+    <test name="Current Queue">
+        <classes>
+            <class name="tests.CurrentQueueTest"/>
+        </classes>
+    </test>
+</suite>
