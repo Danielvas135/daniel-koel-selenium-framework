@@ -10,7 +10,7 @@ public class CurrentQueueTest extends BaseTest {
     @Test
     public void currentlyPlayedSongsDisplayed() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
@@ -24,7 +24,7 @@ public class CurrentQueueTest extends BaseTest {
     @Test
     public void totalSongCountDisplayed() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         home.playFirstSong();
         home.openCurrentQueue();
@@ -35,7 +35,7 @@ public class CurrentQueueTest extends BaseTest {
     @Test
     public void totalDurationDisplayed() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         home.playFirstSong();
         home.openCurrentQueue();
@@ -46,7 +46,7 @@ public class CurrentQueueTest extends BaseTest {
     @Test
     public void songDetailsDisplayed() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         home.playFirstSong();
         home.openCurrentQueue();
@@ -57,7 +57,7 @@ public class CurrentQueueTest extends BaseTest {
     @Test
     public void shuffleAllSongs() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
@@ -72,7 +72,7 @@ public class CurrentQueueTest extends BaseTest {
     @Test
     public void clearEmptiesQueue() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         home.playFirstSong();
         home.openCurrentQueue();
@@ -84,7 +84,7 @@ public class CurrentQueueTest extends BaseTest {
     @Test
     public void doubleClickSongNavigatesToQueue() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
