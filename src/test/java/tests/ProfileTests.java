@@ -152,63 +152,6 @@ public class ProfileTests extends BaseTest {
     }
 
     @Test
-    public void showNowPlayingNotification() {
-        new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", PASS);
-
-        openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
-
-        WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='notify']"));
-        if (!checkbox.isSelected()) {
-            checkbox.click();
-        }
-        getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-        shortPause();
-
-        boolean checked = getDriver().findElement(By.cssSelector("input[name='notify']")).isSelected();
-        Assert.assertTrue(checked, "Now Playing checkbox should remain checked after save");
-    }
-
-    @Test
-    public void confirmBeforeClosingEnabled() {
-        new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", PASS);
-
-        openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
-
-        WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='confirm_closing']"));
-        if (!checkbox.isSelected()) {
-            checkbox.click();
-            getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-            shortPause();
-        }
-
-        boolean checked = getDriver().findElement(By.cssSelector("input[name='confirm_closing']")).isSelected();
-        Assert.assertTrue(checked, "Confirm before closing should be checked");
-    }
-
-    @Test
-    public void translucentAlbumArtOverlay() {
-        new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", PASS);
-
-        openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
-
-        WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='show_album_art_overlay']"));
-        if (!checkbox.isSelected()) {
-            checkbox.click();
-            getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-            shortPause();
-        }
-
-        boolean checked = getDriver().findElement(By.cssSelector("input[name='show_album_art_overlay']")).isSelected();
-        Assert.assertTrue(checked, "Album art overlay checkbox should be checked after save");
-    }
-
-    @Test
     public void userCanChangeTheme() {
         new LoginPage(getDriver())
                 .loginAs("daniel.vasquez@testpro.io", PASS);
@@ -235,6 +178,69 @@ public class ProfileTests extends BaseTest {
     }
 
     @Test
+    public void showNowPlayingNotification() {
+        new LoginPage(getDriver())
+                .loginAs("daniel.vasquez@testpro.io", PASS);
+
+        openProfile();
+        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
+
+        WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='notify']"));
+        if (!checkbox.isSelected()) {
+            checkbox.click();
+            getDriver().findElement(By.cssSelector("button.btn-submit")).click();
+            shortPause();
+        }
+
+        Assert.assertTrue(
+                getDriver().findElement(By.cssSelector("input[name='notify']")).isSelected(),
+                "Now Playing checkbox should remain checked after save"
+        );
+    }
+
+    @Test
+    public void confirmBeforeClosingEnabled() {
+        new LoginPage(getDriver())
+                .loginAs("daniel.vasquez@testpro.io", PASS);
+
+        openProfile();
+        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
+
+        WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='confirm_closing']"));
+        if (!checkbox.isSelected()) {
+            checkbox.click();
+            getDriver().findElement(By.cssSelector("button.btn-submit")).click();
+            shortPause();
+        }
+
+        Assert.assertTrue(
+                getDriver().findElement(By.cssSelector("input[name='confirm_closing']")).isSelected(),
+                "Confirm before closing should be checked"
+        );
+    }
+
+    @Test
+    public void albumArtOverlayCheckboxStaysChecked() {
+        new LoginPage(getDriver())
+                .loginAs("daniel.vasquez@testpro.io", PASS);
+
+        openProfile();
+        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
+
+        WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='show_album_art_overlay']"));
+        if (!checkbox.isSelected()) {
+            checkbox.click();
+            getDriver().findElement(By.cssSelector("button.btn-submit")).click();
+            shortPause();
+        }
+
+        Assert.assertTrue(
+                getDriver().findElement(By.cssSelector("input[name='show_album_art_overlay']")).isSelected(),
+                "Album art overlay checkbox should stay checked after save"
+        );
+    }
+
+    @Test
     public void albumArtOverlayVisibleWhenEnabled() {
         new LoginPage(getDriver())
                 .loginAs("daniel.vasquez@testpro.io", PASS);
@@ -253,9 +259,11 @@ public class ProfileTests extends BaseTest {
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("tr.song-item"))).click();
         shortPause();
 
-        boolean overlay = getDriver().findElements(
-                By.cssSelector("[data-testid='album-art-overlay'], .album-art-overlay, [class*='overlay']")).size() > 0;
+        boolean overlayPresent = getDriver().findElements(
+                By.cssSelector("[data-testid='album-art-overlay'], .album-art-overlay")
+        ).size() > 0;
 
-        Assert.assertTrue(overlay, "Album art overlay should be visible when the option is enabled");
+        Assert.assertTrue(overlayPresent,
+                "Translucent blurred album art overlay should be visible when the option is enabled");
     }
 }
