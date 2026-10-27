@@ -60,3 +60,7 @@ src/
 
 Daniel Vasquez  
 QA Automation Engineer
+
+
+## Sprint 10
+Homepage, Profile & Preferences, and Current Queue automation tests.
