@@ -10,7 +10,7 @@ public class LogoutTest extends BaseTest {
     @Test
     public void logoutReturnsToLoginPage() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
@@ -22,7 +22,7 @@ public class LogoutTest extends BaseTest {
     @Test
     public void logoutButtonIsPresent() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
         Assert.assertTrue(home.isLogoutButtonVisible(), "Logout button should be present next to Profile");
@@ -33,7 +33,7 @@ public class LogoutTest extends BaseTest {
         // For now this just logs out after a normal login.
         // If you later add a real profile-update step, call it here first.
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
