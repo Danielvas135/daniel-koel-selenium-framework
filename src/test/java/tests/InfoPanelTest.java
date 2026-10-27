@@ -11,7 +11,7 @@ public class InfoPanelTest extends BaseTest {
     @Test
     public void infoPanelOpensAndCloses() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
@@ -27,7 +27,7 @@ public class InfoPanelTest extends BaseTest {
     @Test
     public void infoPanelOpensAndClosesMultipleTimes() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
@@ -46,7 +46,7 @@ public class InfoPanelTest extends BaseTest {
     @Test
     public void artistAndAlbumTabsShowContent() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         home.playFirstSong();
         home.openInfoPanel();
@@ -62,7 +62,7 @@ public class InfoPanelTest extends BaseTest {
     @Test
     public void lyricsTabOpens() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         home.playFirstSong();
         home.openInfoPanel();
@@ -74,7 +74,7 @@ public class InfoPanelTest extends BaseTest {
     @Test
     public void shuffleAllSongs() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
@@ -89,7 +89,7 @@ public class InfoPanelTest extends BaseTest {
     @Test
     public void shuffleByArtistAndAlbum() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
