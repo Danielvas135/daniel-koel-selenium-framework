@@ -39,9 +39,6 @@ public class HomePage extends BasePage {
     @FindBy(css = "tr.song-item")
     private List<WebElement> songRows;
 
-    @FindBy(css = "[data-test='btn-shuffle-all'], .btn-shuffle-all")
-    private WebElement shuffleAllBtn;
-
     private By playlistByName(String name) {
         return By.xpath("//section[@id='playlists']//a[normalize-space(text())='" + name + "']");
     }
@@ -131,13 +128,11 @@ public class HomePage extends BasePage {
     }
 
     public void clickArtistShuffle() {
-        By shuffle = By.xpath("//div[@id='extraPanelArtist']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]");
-        jsClick(shuffle);
+        jsClick(By.xpath("//div[@id='extraPanelArtist']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]"));
     }
 
     public void clickAlbumShuffle() {
-        By shuffle = By.xpath("//div[@id='extraPanelAlbum']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]");
-        jsClick(shuffle);
+        jsClick(By.xpath("//div[@id='extraPanelAlbum']//button[contains(@title,'Shuffle') or contains(@class,'shuffle')]"));
     }
 
     public String getLyricsPanelText() {
@@ -187,6 +182,62 @@ public class HomePage extends BasePage {
         return out;
     }
 
+    // ===== Current Queue =====
+
+    public void openCurrentQueue() {
+        jsClick(By.cssSelector("a[href='#!/queue']"));
+    }
+
+    public boolean isCurrentQueueLoaded() {
+        return driver.getCurrentUrl().contains("queue") ||
+                driver.findElements(By.id("queueWrapper")).size() > 0;
+    }
+
+    public int getQueueSongCount() {
+        return driver.findElements(By.cssSelector("#queueWrapper .song-item, #queueWrapper tr")).size();
+    }
+
+    public boolean isTotalSongCountVisible() {
+        List<WebElement> meta = driver.findElements(By.cssSelector("[data-test='list-meta']"));
+        if (meta.isEmpty()) return false;
+        return meta.get(0).getText().toLowerCase().contains("song");
+    }
+
+    public boolean isTotalDurationVisible() {
+        List<WebElement> meta = driver.findElements(By.cssSelector("[data-test='list-meta']"));
+        if (meta.isEmpty()) return false;
+        return meta.get(0).getText().contains(":");
+    }
+
+    public boolean hasSongDetails() {
+        List<WebElement> rows = driver.findElements(By.cssSelector("tr.song-item"));
+        if (rows.isEmpty()) return false;
+
+        WebElement first = rows.get(0);
+        boolean hasTrack = first.findElements(By.cssSelector("td.track-number")).size() > 0;
+        boolean hasTitle = first.findElements(By.cssSelector("td.title")).size() > 0;
+        boolean hasArtist = first.findElements(By.cssSelector("td.artist")).size() > 0;
+        boolean hasAlbum = first.findElements(By.cssSelector("td.album")).size() > 0;
+        boolean hasTime = first.findElements(By.cssSelector("td.time")).size() > 0;
+
+        return hasTrack && hasTitle && hasArtist && hasAlbum && hasTime;
+    }
+
+    public String getFirstQueueSongTitle() {
+        List<WebElement> titles = driver.findElements(By.cssSelector("#queueWrapper .title, #queueWrapper td:nth-child(2)"));
+        return titles.isEmpty() ? "" : titles.get(0).getText().trim();
+    }
+
+    public void clickClearQueue() {
+        jsClick(By.xpath("//button[contains(text(),'Clear') or contains(@title,'Clear')]"));
+    }
+
+    public boolean isQueueEmptyMessageVisible() {
+        return driver.findElements(By.xpath("//*[contains(text(),'No songs queued') or contains(text(),'shuffling all songs')]")).size() > 0;
+    }
+
+    // ===== Helpers =====
+
     private void jsClick(By locator) {
         WebElement el = new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(locator));
@@ -196,5 +247,20 @@ public class HomePage extends BasePage {
 
     private void shortPause() {
         try { Thread.sleep(100); } catch (InterruptedException ignored) {}
+    }
+    public void doubleClickFirstSong() {
+        List<WebElement> songs = driver.findElements(By.cssSelector("tr.song-item"));
+        if (songs.isEmpty()) return;
+
+        WebElement first = songs.get(0);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", first);
+        shortPause();
+
+        try {
+            new Actions(driver).moveToElement(first).doubleClick(first).perform();
+        } catch (ElementNotInteractableException e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].dispatchEvent(new MouseEvent('dblclick', {bubbles: true}));", first);
+        }
+        shortPause();
     }
 }
