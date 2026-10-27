@@ -10,7 +10,7 @@ public class PlaylistTests extends BaseTest {
     @Test
     public void createRenameDeletePlaylist() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
+                .loginAs("daniel.vasquez@testpro.io", "BrightApple135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should load after login");
 
