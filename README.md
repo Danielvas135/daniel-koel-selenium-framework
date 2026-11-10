@@ -3,42 +3,36 @@
 A Java + Selenium + TestNG UI automation framework for the Koel music player app, built with the Page Object Model.
 
 ## Overview
+This project automates key user flows in the Koel web application (https://qa.koel.app), including authentication, playlist management, profile updates, current queue, and the info panel. It is structured as a reusable framework that can be extended with additional page objects and test suites.
 
-This project automates key user flows in the Koel web application (https://qa.koel.app), including authentication, playlist management, and profile updates. It is structured as a reusable framework that can be extended with additional page objects and test suites.
+I built this during a QA Automation internship and used it to verify acceptance criteria, find real bugs, and practice maintainable test design.
 
 ## Tech Stack
-
-- **Java**
-- **Selenium WebDriver**
-- **TestNG**
-- **Gradle**
-- **Page Object Model**
-- **Cucumber** (feature files + step definitions)
+- Java
+- Selenium WebDriver
+- TestNG
+- Gradle
+- Page Object Model
 
 ## Project Structure
-
 ```
 src/
   test/
     java/
       pages/          # Page objects (LoginPage, HomePage, BasePage)
-      tests/          # TestNG test classes (LoginTests, PlaylistTests, ProfileTests)
-      runners/        # Cucumber runners
-      stepDefinitions/# Cucumber step definitions
+      tests/          # TestNG test classes
     resources/
-      features/       # Gherkin feature files
       *.xml           # TestNG suites
 ```
 
-## Features Covered
-
-- Valid and invalid login
+## Features Automated
+- Valid and invalid login / logout
 - Playlist create, rename, and delete
-- Profile updates
-- Base setup for driver management, waits, and screenshots
+- Profile updates (name, email, password, theme, preferences)
+- Current Queue (song list, duration, shuffle, clear)
+- Info Panel (open/close, album, artist, lyrics, shuffle by artist/album)
 
 ## Getting Started
-
 1. Clone the repository:
    ```bash
    git clone https://github.com/Danielvas135/daniel-koel-selenium-framework.git
@@ -51,12 +45,11 @@ src/
    Or run a specific suite from the TestNG XML files in `src/test/resources`.
 
 ## Notes
-
 - Tests target the QA environment of Koel.
-- Credentials are externalized; update them in the test classes or a config file as needed.
+- Credentials are in the test classes (update as needed).
 - The framework follows the Page Object Model for maintainability.
+- Several real bugs were found and reported during testing (info panel shuffle, profile update flows, etc.).
 
 ## Author
-
 Daniel Vasquez  
 QA Automation Engineer
