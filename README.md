@@ -42,14 +42,18 @@ src/
    ```bash
    ./gradlew test
    ```
+   (If the Gradle wrapper is missing, generate it with `gradle wrapper` then commit the files.)
    Or run a specific suite from the TestNG XML files in `src/test/resources`.
 
 ## Notes
-- Tests target the QA environment of Koel.
-- Credentials are in the test classes (update as needed).
+- Tests target the QA environment of Koel (https://qa.koel.app).
+- Tests log in with a dedicated QA test account on qa.koel.app.
 - The framework follows the Page Object Model for maintainability.
-- Several real bugs were found and reported during testing (info panel shuffle, profile update flows, etc.).
+- Real bugs found and reported:
+  - Artist shuffle on the Info Panel played the same song instead of a random one.
+  - Profile name update required the current password and did not immediately reflect in the header until refreshed.
+  - Some songs showed no album/artist data in the Info Panel even when expected.
 
 ## Author
 Daniel Vasquez  
-QA Automation Engineer
+QA Tester transitioning to automation
