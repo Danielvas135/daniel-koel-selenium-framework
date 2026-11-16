@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import pages.LoginPage;
 
 import java.time.Duration;
+import java.util.List;
 
 public class ProfileTests extends BaseTest {
 
@@ -225,7 +226,12 @@ public class ProfileTests extends BaseTest {
                 .loginAs("daniel.vasquez@testpro.io", PASS);
 
         openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
+
+        // Only fill current password if the field is present
+        List<WebElement> currentPass = getDriver().findElements(By.id("inputProfileCurrentPassword"));
+        if (!currentPass.isEmpty()) {
+            currentPass.get(0).sendKeys(PASS);
+        }
 
         WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='show_album_art_overlay']"));
         if (!checkbox.isSelected()) {

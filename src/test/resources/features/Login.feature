@@ -4,7 +4,7 @@ Feature: Login feature
     Given I open browser
     And I open Login page
     When I enter email "daniel.vasquez@testpro.io"
-    And I enter password "KoelTest123!"
+    And I enter password "BrightApple135!"
     And I submit
     Then I am logged in
     When I open All Songs

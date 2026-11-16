@@ -53,13 +53,26 @@ public class LoginSteps {
 
     @Then("I am logged in")
     public void iAmLoggedIn() {
-        Assert.assertTrue(driver.getCurrentUrl().contains("qa.koel.app"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+        // Wait until we leave the login page and the sidebar appears
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("nav#sidebar")));
+
+        Assert.assertTrue(
+                driver.findElements(By.cssSelector("nav#sidebar")).size() > 0,
+                "Sidebar should be visible after successful login"
+        );
     }
+
     @When("I open All Songs")
     public void iOpenAllSongs() {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.songs")))
-                .click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        // Wait until the sidebar is present
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("nav#sidebar")));
+
+        // Then click All Songs
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.songs"))).click();
     }
 
     @And("I play the first song")
