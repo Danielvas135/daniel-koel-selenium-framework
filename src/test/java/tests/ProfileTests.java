@@ -24,10 +24,6 @@ public class ProfileTests extends BaseTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("profileWrapper")));
     }
 
-    private void shortPause() {
-        try { Thread.sleep(600); } catch (InterruptedException ignored) {}
-    }
-
     @Test
     public void userCanChangeName() {
         new LoginPage(getDriver())
@@ -41,7 +37,8 @@ public class ProfileTests extends BaseTest {
         nameField.clear();
         nameField.sendKeys(newName);
         getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-        shortPause();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'Profile updated')]")));
 
         Assert.assertEquals(nameField.getAttribute("value"), newName, "Name field should show the new name");
 
@@ -67,18 +64,20 @@ public class ProfileTests extends BaseTest {
         nameField.sendKeys(newName);
         getDriver().findElement(By.cssSelector("button.btn-submit")).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Profile updated')]")));
-        shortPause();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'Profile updated')]")));
 
         String displayed = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span.name"))).getText();
         Assert.assertTrue(displayed.contains(newName), "Updated name should appear in the header");
 
+        // restore original name
         openProfile();
         getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
         getDriver().findElement(By.id("inputProfileName")).clear();
         getDriver().findElement(By.id("inputProfileName")).sendKeys("Dvasquez");
         getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Profile updated')]")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'Profile updated')]")));
     }
 
     @Test
@@ -94,7 +93,8 @@ public class ProfileTests extends BaseTest {
         emailField.clear();
         emailField.sendKeys(newEmail);
         getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-        shortPause();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'Profile updated')]")));
 
         Assert.assertEquals(emailField.getAttribute("value"), newEmail, "Email field should show the new email");
 
@@ -108,48 +108,52 @@ public class ProfileTests extends BaseTest {
 
     @Test
     public void userCanUpdatePassword() {
+        final String currentPass = "BrightApple135!";
+        final String tempPass = "QuickMango135!";
+
         new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", PASS);
+                .loginAs("daniel.vasquez@testpro.io", currentPass);
 
         openProfile();
 
         WebElement current = wait.until(ExpectedConditions.elementToBeClickable(By.id("inputProfileCurrentPassword")));
         current.clear();
-        current.sendKeys(PASS);
+        current.sendKeys(currentPass);
 
         WebElement newPass = getDriver().findElement(By.id("inputProfileNewPassword"));
         newPass.clear();
-        newPass.sendKeys("QuickMango135!");
+        newPass.sendKeys(tempPass);
 
         getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Profile updated')]")));
-        shortPause();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'Profile updated')]")));
 
         ((JavascriptExecutor) getDriver())
                 .executeScript("document.querySelector(\"[data-testid='btn-logout']\").click();");
-        shortPause();
+
         getDriver().navigate().to("https://qa.koel.app");
-        shortPause();
 
         new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "QuickMango135!");
+                .loginAs("daniel.vasquez@testpro.io", tempPass);
 
         Assert.assertTrue(
                 getDriver().findElements(By.cssSelector("[data-testid='view-profile-link']")).size() > 0,
                 "Should be logged in with the new password"
         );
 
+        // restore original password
         openProfile();
         WebElement current2 = wait.until(ExpectedConditions.elementToBeClickable(By.id("inputProfileCurrentPassword")));
         current2.clear();
-        current2.sendKeys("QuickMango135!");
+        current2.sendKeys(tempPass);
 
         WebElement restorePass = wait.until(ExpectedConditions.elementToBeClickable(By.id("inputProfileNewPassword")));
         restorePass.clear();
-        restorePass.sendKeys(PASS);
+        restorePass.sendKeys(currentPass);
 
         getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Profile updated')]")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'Profile updated')]")));
     }
 
     @Test
@@ -161,7 +165,6 @@ public class ProfileTests extends BaseTest {
 
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("div[data-testid='theme-card-pines']"))).click();
-        shortPause();
 
         getDriver().navigate().to("https://qa.koel.app");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='view-profile-link']")));
@@ -175,7 +178,6 @@ public class ProfileTests extends BaseTest {
         openProfile();
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("div[data-testid='theme-card-classic']"))).click();
-        shortPause();
     }
 
     @Test
@@ -190,7 +192,8 @@ public class ProfileTests extends BaseTest {
         if (!checkbox.isSelected()) {
             checkbox.click();
             getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-            shortPause();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//*[contains(text(),'Profile updated')]")));
         }
 
         Assert.assertTrue(
@@ -205,13 +208,18 @@ public class ProfileTests extends BaseTest {
                 .loginAs("daniel.vasquez@testpro.io", PASS);
 
         openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
+
+        List<WebElement> currentPass = getDriver().findElements(By.id("inputProfileCurrentPassword"));
+        if (!currentPass.isEmpty()) {
+            currentPass.get(0).sendKeys(PASS);
+        }
 
         WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='confirm_closing']"));
         if (!checkbox.isSelected()) {
             checkbox.click();
             getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-            shortPause();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//*[contains(text(),'Profile updated')]")));
         }
 
         Assert.assertTrue(
@@ -237,12 +245,19 @@ public class ProfileTests extends BaseTest {
         if (!checkbox.isSelected()) {
             checkbox.click();
             getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-            shortPause();
+
+            // Wait for the real success message instead of sleeping
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//*[contains(text(),'Profile updated')]")));
         }
+
+        // Refresh and re-open so we prove the setting actually persisted
+        getDriver().navigate().refresh();
+        openProfile();
 
         Assert.assertTrue(
                 getDriver().findElement(By.cssSelector("input[name='show_album_art_overlay']")).isSelected(),
-                "Album art overlay checkbox should stay checked after save"
+                "Album art overlay checkbox should stay checked after save and refresh"
         );
     }
 
@@ -258,12 +273,12 @@ public class ProfileTests extends BaseTest {
         if (!checkbox.isSelected()) {
             checkbox.click();
             getDriver().findElement(By.cssSelector("button.btn-submit")).click();
-            shortPause();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//*[contains(text(),'Profile updated')]")));
         }
 
         getDriver().navigate().to("https://qa.koel.app/#!/songs");
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("tr.song-item"))).click();
-        shortPause();
 
         boolean overlayPresent = getDriver().findElements(
                 By.cssSelector("[data-testid='album-art-overlay'], .album-art-overlay")
