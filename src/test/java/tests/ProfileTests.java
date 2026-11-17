@@ -180,6 +180,9 @@ public class ProfileTests extends BaseTest {
                 pinesCard.getAttribute("class").contains("selected"),
                 "Pines theme should be selected"
         );
+
+        // Restore default theme
+        getDriver().findElement(By.cssSelector("div[data-testid='theme-card-classic']")).click();
     }
 
     @Test
