@@ -229,7 +229,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickClearQueue() {
-        jsClick(By.xpath("//button[contains(text(),'Clear') or contains(@title,'Clear')]"));
+        jsClick(By.cssSelector("button.btn-clear-queue"));
     }
 
     public boolean isQueueEmptyMessageVisible() {

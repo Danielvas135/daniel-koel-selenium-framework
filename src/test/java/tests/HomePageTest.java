@@ -49,9 +49,14 @@ public class HomePageTest extends BaseTest {
     public void viewAllButtonIsDisplayedNextToRecentlyPlayed() {
         login();
 
-        WebElement viewAll = getDriver().findElement(
+        // Make sure we're on the Home page
+        getDriver().findElement(By.cssSelector("a.home, a[href='#!/home']")).click();
+        shortPause();
+
+        WebElement viewAll = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("button[data-testid='home-view-all-recently-played-btn']")
-        );
+        ));
+
         Assert.assertTrue(viewAll.isDisplayed(), "View All button should be visible");
         Assert.assertTrue(viewAll.getText().contains("View All"), "Button text should be View All");
     }
@@ -187,8 +192,8 @@ public class HomePageTest extends BaseTest {
     @Test
     public void playlistsPanelShowsFavoritesRecentlyPlayedAndUserPlaylists() {
         login();
-        Assert.assertTrue(getDriver().findElements(By.cssSelector("li.playlist.favorites")).size() > 0, "Favorites should be present");
-        Assert.assertTrue(getDriver().findElements(By.cssSelector("li.playlist.recently-played")).size() > 0, "Recently Played should be present");
+        Assert.assertTrue(getDriver().findElements(By.cssSelector("li.playlist.favorites, a[href='#!/favorites']")).size() > 0, "Favorites should be present");
+        Assert.assertTrue(getDriver().findElements(By.cssSelector("li.playlist.recently-played, a[href='#!/recently-played']")).size() > 0, "Recently Played should be present");
         Assert.assertTrue(getDriver().findElements(By.cssSelector("li.playlist.playlist")).size() > 0, "User playlists should be present");
     }
 

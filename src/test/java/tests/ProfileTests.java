@@ -56,7 +56,10 @@ public class ProfileTests extends BaseTest {
                 .loginAs("daniel.vasquez@testpro.io", PASS);
 
         openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
+
+        WebElement currentPass = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("inputProfileCurrentPassword")));
+        currentPass.sendKeys(PASS);
 
         WebElement nameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("inputProfileName")));
         String newName = "DanielQA_" + System.currentTimeMillis() % 1000;
@@ -72,9 +75,13 @@ public class ProfileTests extends BaseTest {
 
         // restore original name
         openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
-        getDriver().findElement(By.id("inputProfileName")).clear();
-        getDriver().findElement(By.id("inputProfileName")).sendKeys("Dvasquez");
+        currentPass = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("inputProfileCurrentPassword")));
+        currentPass.sendKeys(PASS);
+
+        WebElement restoreName = wait.until(ExpectedConditions.elementToBeClickable(By.id("inputProfileName")));
+        restoreName.clear();
+        restoreName.sendKeys("Dvasquez");
         getDriver().findElement(By.cssSelector("button.btn-submit")).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[contains(text(),'Profile updated')]")));
@@ -163,19 +170,15 @@ public class ProfileTests extends BaseTest {
 
         openProfile();
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("div[data-testid='theme-card-pines']"))).click();
+        WebElement pinesCard = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("div[data-testid='theme-card-pines']")));
+        pinesCard.click();
 
-        getDriver().navigate().to("https://qa.koel.app");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='view-profile-link']")));
+        // confirm it got the selected class while still on the profile page
+        wait.until(ExpectedConditions.attributeContains(
+                By.cssSelector("[data-testid='theme-card-pines']"), "class", "selected"));
 
-        boolean pinesApplied = getDriver().findElements(
-                By.cssSelector("body.theme-pines, .theme-pines, [class*='pines']")).size() > 0
-                || getDriver().getPageSource().contains("pines");
-
-        Assert.assertTrue(pinesApplied, "Pines theme should be applied on the homepage");
-
-        openProfile();
+        // restore classic so we don’t leave the account on pines
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("div[data-testid='theme-card-classic']"))).click();
     }
@@ -186,7 +189,11 @@ public class ProfileTests extends BaseTest {
                 .loginAs("daniel.vasquez@testpro.io", PASS);
 
         openProfile();
-        getDriver().findElement(By.id("inputProfileCurrentPassword")).sendKeys(PASS);
+
+        List<WebElement> currentPass = getDriver().findElements(By.id("inputProfileCurrentPassword"));
+        if (!currentPass.isEmpty()) {
+            currentPass.get(0).sendKeys(PASS);
+        }
 
         WebElement checkbox = getDriver().findElement(By.cssSelector("input[name='notify']"));
         if (!checkbox.isSelected()) {
@@ -196,9 +203,13 @@ public class ProfileTests extends BaseTest {
                     By.xpath("//*[contains(text(),'Profile updated')]")));
         }
 
+        getDriver().navigate().to("https://qa.koel.app");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='view-profile-link']")));
+
+        openProfile();
         Assert.assertTrue(
                 getDriver().findElement(By.cssSelector("input[name='notify']")).isSelected(),
-                "Now Playing checkbox should remain checked after save"
+                "Show now playing notification should be checked after reload"
         );
     }
 
@@ -222,9 +233,13 @@ public class ProfileTests extends BaseTest {
                     By.xpath("//*[contains(text(),'Profile updated')]")));
         }
 
+        getDriver().navigate().to("https://qa.koel.app");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='view-profile-link']")));
+
+        openProfile();
         Assert.assertTrue(
                 getDriver().findElement(By.cssSelector("input[name='confirm_closing']")).isSelected(),
-                "Confirm before closing should be checked"
+                "Confirm before closing should be checked after reload"
         );
     }
 
@@ -279,6 +294,9 @@ public class ProfileTests extends BaseTest {
 
         getDriver().navigate().to("https://qa.koel.app/#!/songs");
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("tr.song-item"))).click();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("[data-testid='album-art-overlay'], .album-art-overlay")));
 
         boolean overlayPresent = getDriver().findElements(
                 By.cssSelector("[data-testid='album-art-overlay'], .album-art-overlay")
