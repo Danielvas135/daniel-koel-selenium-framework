@@ -23,15 +23,19 @@ Full regression suite: **45 automated tests** (44 TestNG + 1 Cucumber BDD scenar
 src/
   test/
     java/
-      pages/          # Page objects (LoginPage, HomePage, BasePage)
-      tests/          # TestNG test classes
+      pages/            # Page objects (LoginPage, HomePage, BasePage)
+      runners/          # Cucumber TestNG runner (LoginRunner)
+      stepDefinitions/  # Cucumber step definitions (LoginSteps)
+      tests/            # TestNG test classes
     resources/
-      *.xml           # TestNG suites
+      features/         # Gherkin feature files
+      *.xml             # TestNG suites (Regression, TestNG smoke, Sprint9, Sprint10)
 ```
 
 ## Features Automated
 - Valid and invalid login / logout
-- Playlist create, rename, and delete
+- Homepage (welcome message, Recently Played and Recently Added sections, search, navigation and playlist panels, profile/logout/about icons)
+- Playlist create, rename, and delete (end-to-end flow in one test)
 - Profile updates (name, email, password, theme, preferences)
 - Current Queue (song list, duration, shuffle, clear)
 - Info Panel (open/close, album, artist, lyrics, shuffle by artist/album)
