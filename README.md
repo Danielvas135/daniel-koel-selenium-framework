@@ -11,8 +11,12 @@ I built this during a QA Automation internship and used it to verify acceptance 
 - Java
 - Selenium WebDriver
 - TestNG
+- Cucumber (BDD)
 - Gradle
 - Page Object Model
+
+## Test Results
+Full regression suite: **45 automated tests** (44 TestNG + 1 Cucumber BDD scenario) across 7 test classes, **100% passing** against the Koel QA environment.
 
 ## Project Structure
 ```
@@ -34,16 +38,13 @@ src/
 
 ## Getting Started
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/Danielvas135/daniel-koel-selenium-framework.git
-   ```
+   `git clone https://github.com/Danielvas135/daniel-koel-selenium-framework.git`
 2. Open the project in IntelliJ IDEA (or any IDE with Gradle support).
-3. Run tests with:
-   ```bash
-   ./gradlew test
-   ```
-   (If the Gradle wrapper is missing, generate it with `gradle wrapper` then commit the files.)
-   Or run a specific suite from the TestNG XML files in `src/test/resources`.
+3. Run the full regression suite:
+   `./gradlew cleanTest test`
+4. Run a single suite (for example, the smoke suite):
+   `./gradlew cleanTest test -Psuite=TestNG`
+5. View results in `build/reports/tests/test/index.html`.
 
 ## Notes
 - Tests target the QA environment of Koel (https://qa.koel.app).
@@ -56,4 +57,4 @@ src/
 
 ## Author
 Daniel Vasquez  
-QA Tester transitioning to automation
+QA Engineer | Java · Selenium · TestNG · Cucumber
