@@ -12,6 +12,7 @@ import pages.LoginPage;
 import java.time.Duration;
 import java.util.List;
 
+
 public class ProfileTests extends BaseTest {
 
     private WebDriverWait wait;
@@ -170,17 +171,15 @@ public class ProfileTests extends BaseTest {
 
         openProfile();
 
-        WebElement pinesCard = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("div[data-testid='theme-card-pines']")));
+        WebElement pinesCard = getDriver().findElement(By.cssSelector("div[data-testid='theme-card-pines']"));
         pinesCard.click();
 
-        // confirm it got the selected class while still on the profile page
-        wait.until(ExpectedConditions.attributeContains(
-                By.cssSelector("[data-testid='theme-card-pines']"), "class", "selected"));
+        wait.until(ExpectedConditions.attributeContains(pinesCard, "class", "selected"));
 
-        // restore classic so we don’t leave the account on pines
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("div[data-testid='theme-card-classic']"))).click();
+        Assert.assertTrue(
+                pinesCard.getAttribute("class").contains("selected"),
+                "Pines theme should be selected"
+        );
     }
 
     @Test
@@ -295,14 +294,9 @@ public class ProfileTests extends BaseTest {
         getDriver().navigate().to("https://qa.koel.app/#!/songs");
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("tr.song-item"))).click();
 
+        // The wait itself is the assertion
         wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.cssSelector("[data-testid='album-art-overlay'], .album-art-overlay")));
-
-        boolean overlayPresent = getDriver().findElements(
                 By.cssSelector("[data-testid='album-art-overlay'], .album-art-overlay")
-        ).size() > 0;
-
-        Assert.assertTrue(overlayPresent,
-                "Translucent blurred album art overlay should be visible when the option is enabled");
+        ));
     }
 }
