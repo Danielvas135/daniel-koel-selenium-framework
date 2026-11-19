@@ -4,8 +4,13 @@
     <test name="Regression Tests">
         <classes>
             <class name="tests.LoginTests"/>
+            <class name="tests.LogoutTest"/>
+            <class name="tests.HomePageTest"/>
+            <class name="tests.InfoPanelTest"/>
+            <class name="tests.CurrentQueueTest"/>
             <class name="tests.PlaylistTests"/>
             <class name="tests.ProfileTests"/>
+            <class name="runners.LoginRunner"/>
         </classes>
     </test>
 </suite>

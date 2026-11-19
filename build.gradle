@@ -24,7 +24,7 @@ configurations.all {
     }
 }
 
-def suiteName = project.findProperty('suite') ?: 'TestNG'
+def suiteName = project.findProperty('suite') ?: 'Regression'
 
 test {
     useTestNG() {
