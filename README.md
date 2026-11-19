@@ -11,39 +11,44 @@ I built this during a QA Automation internship and used it to verify acceptance 
 - Java
 - Selenium WebDriver
 - TestNG
+- Cucumber (BDD)
 - Gradle
 - Page Object Model
+
+## Test Results
+Full regression suite: **45 automated tests** (44 TestNG + 1 Cucumber BDD scenario) across 7 test classes, **100% passing** against the Koel QA environment.
 
 ## Project Structure
 ```
 src/
   test/
     java/
-      pages/          # Page objects (LoginPage, HomePage, BasePage)
-      tests/          # TestNG test classes
+      pages/            # Page objects (LoginPage, HomePage, BasePage)
+      runners/          # Cucumber TestNG runner (LoginRunner)
+      stepDefinitions/  # Cucumber step definitions (LoginSteps)
+      tests/            # TestNG test classes
     resources/
-      *.xml           # TestNG suites
+      features/         # Gherkin feature files
+      *.xml             # TestNG suites (Regression, TestNG smoke, Sprint9, Sprint10)
 ```
 
 ## Features Automated
 - Valid and invalid login / logout
-- Playlist create, rename, and delete
+- Homepage (welcome message, Recently Played and Recently Added sections, search, navigation and playlist panels, profile/logout/about icons)
+- Playlist create, rename, and delete (end-to-end flow in one test)
 - Profile updates (name, email, password, theme, preferences)
 - Current Queue (song list, duration, shuffle, clear)
 - Info Panel (open/close, album, artist, lyrics, shuffle by artist/album)
 
 ## Getting Started
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/Danielvas135/daniel-koel-selenium-framework.git
-   ```
+   `git clone https://github.com/Danielvas135/daniel-koel-selenium-framework.git`
 2. Open the project in IntelliJ IDEA (or any IDE with Gradle support).
-3. Run tests with:
-   ```bash
-   ./gradlew test
-   ```
-   (If the Gradle wrapper is missing, generate it with `gradle wrapper` then commit the files.)
-   Or run a specific suite from the TestNG XML files in `src/test/resources`.
+3. Run the full regression suite:
+   `./gradlew cleanTest test`
+4. Run a single suite (for example, the smoke suite):
+   `./gradlew cleanTest test -Psuite=TestNG`
+5. View results in `build/reports/tests/test/index.html`.
 
 ## Notes
 - Tests target the QA environment of Koel (https://qa.koel.app).
@@ -56,4 +61,4 @@ src/
 
 ## Author
 Daniel Vasquez  
-QA Tester transitioning to automation
+QA Engineer | Java · Selenium · TestNG · Cucumber
